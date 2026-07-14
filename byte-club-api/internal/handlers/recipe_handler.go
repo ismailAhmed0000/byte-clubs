@@ -47,3 +47,13 @@ func (h *RecipeHandler) Save(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusCreated).JSON(recipe)
 }
+
+func (h *RecipeHandler)List(c *fiber.Ctx)error{
+	userId := c.Locals("user_id").(uint)
+
+	recipes, err := h.RecipeRepo.FindAllByUser(userId)
+	if err != nil{
+		return  c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error":"could not fetch recipes"})
+	}
+	return c.JSON(recipes)
+}
