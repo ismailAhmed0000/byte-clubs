@@ -25,7 +25,7 @@ type SaveRecipeRequest struct {
 }
 
 func (h *RecipeHandler) Save(c *fiber.Ctx) error {
-	userID := c.Locals("user_id").(uint)
+	user_id := c.Locals("user_id").(uint)
 
 	var req SaveRecipeRequest
 	if err := c.BodyParser(&req); err != nil {
@@ -33,8 +33,8 @@ func (h *RecipeHandler) Save(c *fiber.Ctx) error {
 	}
 
 	recipe := models.Recipe{
-		UserID:       userID,
-		SourceURL:    req.SourceURL,
+		UserId:       user_id,
+		SourceUrl:    req.SourceUrl,
 		Platform:     req.Platform,
 		Title:        req.Title,
 		Ingredients:  req.Ingredients,
