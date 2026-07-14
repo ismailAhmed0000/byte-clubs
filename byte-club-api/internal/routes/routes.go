@@ -26,6 +26,7 @@ func Setup(app *fiber.App, db *gorm.DB){
 	recipes := api.Group("/recipes",middleware.Protected())
 	recipes.Post("/",recipeHandler.Save)
 	recipes.Get("/",recipeHandler.List)
+	recipes.Get("/:id", recipeHandler.GetByID)
 	
 
 }

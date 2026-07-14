@@ -57,3 +57,16 @@ func (h *RecipeHandler)List(c *fiber.Ctx)error{
 	}
 	return c.JSON(recipes)
 }
+
+
+func (h *RecipeHandler) GetByID (c *fiber.Ctx)error{
+	userId := c.Locals("user_id").(uint)
+	id:= c.Params("id")
+
+	recipe , err := h.RecipeRepo.FIndByIdAndUser(id,userId)
+	if err != nil{
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error":"recipe not found"})
+	}
+	return  c.JSON(recipe)
+
+}
