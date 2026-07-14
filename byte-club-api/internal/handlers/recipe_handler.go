@@ -70,3 +70,14 @@ func (h *RecipeHandler) GetByID (c *fiber.Ctx)error{
 	return  c.JSON(recipe)
 
 }
+
+func (h *RecipeHandler)Delete(c *fiber.Ctx)error{
+	userId := c.Locals("user_id").(uint)
+	id := c.Params("id")
+
+	if err:= h.RecipeRepo.Delete(id,userId); err != nil{
+		return  c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error":"Recipe not found"})
+	}
+	return  c.JSON(fiber.Map{"message":"recipe deletecd successfully"})
+	
+}
