@@ -28,6 +28,7 @@ func Setup(app *fiber.App, db *gorm.DB){
 	recipes.Get("/",recipeHandler.List)
 	recipes.Get("/:id", recipeHandler.GetByID)
 	recipes.Delete("/:id",recipeHandler.Delete)
+	recipes.Post("/:id/share",recipeHandler.Share)
 	
 
 }

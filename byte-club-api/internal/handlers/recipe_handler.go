@@ -5,6 +5,7 @@ import (
 	"byte-club-api/internal/repository"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 )
 
 type RecipeHandler struct{
@@ -79,5 +80,18 @@ func (h *RecipeHandler)Delete(c *fiber.Ctx)error{
 		return  c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error":"Recipe not found"})
 	}
 	return  c.JSON(fiber.Map{"message":"recipe deletecd successfully"})
+	
+}
+
+func (h *RecipeHandler) Share (c *fiber.Ctx) error{
+	userId := c.Locals("user_id").(uint)
+	id:= c.Params("id")
+	token := uuid.NewString()
+
+	if err := h.RecipeRepo.SetShareToken(id, userId, token); err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "recipe not found"})
+	}
+
+	return c.JSON(fiber.Map{"share_url":"api/public/recipes"+token})
 	
 }
