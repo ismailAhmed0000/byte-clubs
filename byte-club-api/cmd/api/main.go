@@ -15,7 +15,7 @@ func main() {
 	cfg := config.Load()
 	db:=database.Connect(cfg)
 	
-	if err:= db.AutoMigrate(&models.User{});err !=nil{
+	if err:= db.AutoMigrate(&models.User{}, &models.Recipe{});err !=nil{
 		log.Fatalf("failed to migrate to database: %v",err)
 	}
 

@@ -31,4 +31,8 @@ func Setup(app *fiber.App, db *gorm.DB){
 	recipes.Post("/:id/share",recipeHandler.Share)
 	
 
+   public := api.Group("/public")
+   public.Get("/recipe/:token",recipeHandler.GetPublicByToken)
+	
+
 }
