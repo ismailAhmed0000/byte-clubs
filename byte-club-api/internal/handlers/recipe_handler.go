@@ -3,6 +3,7 @@ package handlers
 import (
 	"byte-club-api/internal/models"
 	"byte-club-api/internal/repository"
+	"byte-club-api/internal/services"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -104,4 +105,26 @@ func (h *RecipeHandler) GetPublicByToken(c *fiber.Ctx) error{
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error":"recipe not found"})
 	}
 	return  c.JSON(recipe)
+}
+
+type ExtractRequest struct {
+	URL string `json:"url"`
+}
+
+func (h *RecipeHandler) Extract(c *fiber.Ctx) error {
+	var req ExtractRequest
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid request body"})
+	}
+
+	if req.URL == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "url is required"})
+	}
+
+	recipe, err := services.ExtractRecipe(req.URL)
+	if err != nil {
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return c.JSON(recipe)
 }
