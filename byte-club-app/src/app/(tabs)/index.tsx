@@ -1,26 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import { ScrollView, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Platform } from "react-native";
 
-const folders = [
-  { id: "weeknight", name: "Weeknight", count: 6 },
-  { id: "baking", name: "Baking", count: 4 },
-];
-
-const recentlyAdded = [
-  {
-    id: "1",
-    title: "Miso Sheet-Pan Salmon",
-    author: "Jonas Kade",
-    time: "30 min",
-  },
-  {
-    id: "2",
-    title: "Charred Broccoli Salad",
-    author: "Priya N.",
-    time: "20 min",
-  },
-];
+// const folders = [
+//   { id: "weeknight", name: "Weeknight", count: 6 },
+//   { id: "baking", name: "Baking", count: 4 },
+// ];
 
 export default function HomeScreen() {
   return (
@@ -30,14 +16,28 @@ export default function HomeScreen() {
           contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120 }}
           showsVerticalScrollIndicator={false}
         >
-          <Text className="mt-2 text-3xl font-bold text-black">Byte Club</Text>
-
-          <View className="mt-4 flex-row items-center gap-2 rounded-full bg-white px-4 py-3">
+          <Text
+            className="mt-2 text-3xl font-bold italic"
+            style={{
+              color: "#B4713F",
+              fontFamily: Platform.select({
+                ios: "Georgia",
+                android: "serif",
+                default: "serif",
+              }),
+            }}
+          >
+            Byte Club
+          </Text>
+          <Text className="flex-1 mt-2 text-sm font-bold text-black ">
+            ismaeelahmed@20gmail.com
+          </Text>
+          <View className="mt-4 flex-row items-center gap-2 rounded-full bg-white px-5 py-2">
             <Ionicons name="search-outline" size={18} color="#9CA3AF" />
             <TextInput
               placeholder="Search saved recipes..."
               placeholderTextColor="#9CA3AF"
-              className="flex-1 text-base text-black"
+              className="flex-1 text-base italic text-black"
             />
           </View>
 
@@ -56,7 +56,7 @@ export default function HomeScreen() {
               <Ionicons name="add" size={22} color="#6B7280" />
             </View>
 
-            {folders.map((folder) => (
+            {/* {folders.map((folder) => (
               <View
                 key={folder.id}
                 className="h-24 w-32 justify-end rounded-2xl bg-[#DCE3D3] p-3"
@@ -66,7 +66,7 @@ export default function HomeScreen() {
                   {folder.count} recipes
                 </Text>
               </View>
-            ))}
+            ))} */}
           </ScrollView>
 
           <View className="mt-6 flex-row items-center justify-between">
@@ -77,7 +77,7 @@ export default function HomeScreen() {
           </View>
 
           <View className="mt-3 gap-4">
-            {recentlyAdded.map((recipe) => (
+            {/* {recentlyAdded.map((recipe) => (
               <View
                 key={recipe.id}
                 className="overflow-hidden rounded-2xl bg-white"
@@ -94,7 +94,7 @@ export default function HomeScreen() {
                   </Text>
                 </View>
               </View>
-            ))}
+            ))} */}
           </View>
         </ScrollView>
       </SafeAreaView>

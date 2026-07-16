@@ -33,6 +33,9 @@ export default function AppTabs() {
           </TabTrigger>
         </View>
       </TabList>
+      <Pressable style={styles.fab} onPress={() => {}}>
+        <Ionicons name="add" size={26} color="#fff" />
+      </Pressable>
     </Tabs>
   );
 }
@@ -104,5 +107,21 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: "700",
     letterSpacing: 0.3,
+  },
+  fab: {
+    position: "absolute",
+    bottom: 120,
+    right: 16,
+    width: 56,
+    height: 56,
+    borderRadius: 20,
+    backgroundColor: ACTIVE_BG,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 6,
   },
 });
