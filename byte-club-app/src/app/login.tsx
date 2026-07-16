@@ -28,6 +28,11 @@ export default function LoginScreen() {
     }
   }
 
+  async function handleSkip() {
+    setAuthToken("dev-preview-token");
+    router.replace("/");
+  }
+
   return (
     <View className="flex-1 bg-white dark:bg-black">
       <SafeAreaView className="w-full max-w-[800px] flex-1 justify-center gap-6 self-center px-6">
@@ -68,6 +73,10 @@ export default function LoginScreen() {
             Don&apos;t have an account? Sign up
           </Text>
         </Link>
+
+        <Pressable onPress={handleSkip} className="self-center mt-4">
+          <Text>Skip login</Text>
+        </Pressable>
       </SafeAreaView>
     </View>
   );
