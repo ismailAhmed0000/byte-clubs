@@ -25,7 +25,7 @@ export default function AppTabs() {
             <TabButton icon="book-outline" label="Recipes" />
           </TabTrigger>
           <TabTrigger name="cart" href="/cart" asChild>
-            <TabButton icon="cart-outline" label="Cart" />
+            <TabButton icon="share-outline" label="Share" />
           </TabTrigger>
           <TabTrigger name="profile" href="/profile" asChild>
             <TabButton icon="person-outline" label="Profile" />
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     backgroundColor: "#ffffff",
-    borderRadius: 999,
+    borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 8,
     shadowColor: "#000",

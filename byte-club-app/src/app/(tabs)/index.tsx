@@ -1,98 +1,103 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from "@expo/vector-icons";
+import { ScrollView, Text, TextInput, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+const folders = [
+  { id: "weeknight", name: "Weeknight", count: 6 },
+  { id: "baking", name: "Baking", count: 4 },
+];
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+const recentlyAdded = [
+  {
+    id: "1",
+    title: "Miso Sheet-Pan Salmon",
+    author: "Jonas Kade",
+    time: "30 min",
+  },
+  {
+    id: "2",
+    title: "Charred Broccoli Salad",
+    author: "Priya N.",
+    time: "20 min",
+  },
+];
 
 export default function HomeScreen() {
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <View className="flex-1 bg-[#EEF0EA]">
+      <SafeAreaView className="flex-1">
+        <ScrollView
+          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120 }}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text className="mt-2 text-3xl font-bold text-black">Byte Club</Text>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+          <View className="mt-4 flex-row items-center gap-2 rounded-full bg-white px-4 py-3">
+            <Ionicons name="search-outline" size={18} color="#9CA3AF" />
+            <TextInput
+              placeholder="Search saved recipes..."
+              placeholderTextColor="#9CA3AF"
+              className="flex-1 text-base text-black"
+            />
+          </View>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+          <View className="mt-6 flex-row items-center justify-between">
+            <Text className="text-lg font-semibold text-black">Folders</Text>
+            <Text className="text-sm text-neutral-500">See all</Text>
+          </View>
 
-        {Platform.OS === 'web' && <WebBadge />}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            className="mt-3"
+            contentContainerStyle={{ gap: 12 }}
+          >
+            <View className="h-24 w-28 items-center justify-center rounded-2xl bg-white">
+              <Ionicons name="add" size={22} color="#6B7280" />
+            </View>
+
+            {folders.map((folder) => (
+              <View
+                key={folder.id}
+                className="h-24 w-32 justify-end rounded-2xl bg-[#DCE3D3] p-3"
+              >
+                <Text className="font-semibold text-black">{folder.name}</Text>
+                <Text className="text-xs text-neutral-600">
+                  {folder.count} recipes
+                </Text>
+              </View>
+            ))}
+          </ScrollView>
+
+          <View className="mt-6 flex-row items-center justify-between">
+            <Text className="text-lg font-semibold text-black">
+              Recently Added
+            </Text>
+            <Text className="text-sm text-neutral-500">See all</Text>
+          </View>
+
+          <View className="mt-3 gap-4">
+            {recentlyAdded.map((recipe) => (
+              <View
+                key={recipe.id}
+                className="overflow-hidden rounded-2xl bg-white"
+              >
+                <View className="h-40 items-center justify-center bg-[#E3E6DE]">
+                  <Text className="text-neutral-400">recipe photo</Text>
+                </View>
+                <View className="p-3">
+                  <Text className="font-semibold text-black">
+                    {recipe.title}
+                  </Text>
+                  <Text className="mt-0.5 text-sm text-neutral-500">
+                    by {recipe.author} · {recipe.time}
+                  </Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        </ScrollView>
       </SafeAreaView>
-    </ThemedView>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
-  title: {
-    textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
-  },
-});
