@@ -8,8 +8,9 @@ import {
 } from "expo-router/ui";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-const ACTIVE_COLOR = "#A0522D";
-const INACTIVE_COLOR = "#B9AFA8";
+const ACTIVE_BG = "#D9814F";
+const ACTIVE_COLOR = "#ffffff";
+const INACTIVE_COLOR = "#8B7355";
 
 export default function AppTabs() {
   return (
@@ -22,20 +23,16 @@ export default function AppTabs() {
             <TabButton icon="home" label="Home" />
           </TabTrigger>
           <TabTrigger name="recipes" href="/recipes" asChild>
-            <TabButton icon="book-outline" label="Recipes" />
+            <TabButton icon="restaurant-outline" label="Recipes" />
           </TabTrigger>
           <TabTrigger name="cart" href="/cart" asChild>
-            <TabButton icon="share-outline" label="Share" />
+            <TabButton icon="sparkles-outline" label="Premium" />
           </TabTrigger>
           <TabTrigger name="profile" href="/profile" asChild>
-            <TabButton icon="person-outline" label="Profile" />
+            <TabButton icon="settings-outline" label="Settings" />
           </TabTrigger>
         </View>
       </TabList>
-
-      <Pressable style={styles.fab} onPress={() => {}}>
-        <Ionicons name="add" size={26} color="#fff" />
-      </Pressable>
     </Tabs>
   );
 }
@@ -46,11 +43,24 @@ type TabButtonProps = TabTriggerSlotProps & {
 };
 
 function TabButton({ icon, label, isFocused, ...props }: TabButtonProps) {
-  const color = isFocused ? ACTIVE_COLOR : INACTIVE_COLOR;
   return (
     <Pressable {...props} style={styles.tabButton}>
-      <Ionicons name={icon} size={22} color={color} />
-      <Text style={[styles.label, { color }]}>{label}</Text>
+      <View style={[styles.tabInner, isFocused && styles.tabInnerActive]}>
+        <Ionicons
+          name={icon}
+          size={20}
+          color={isFocused ? ACTIVE_COLOR : INACTIVE_COLOR}
+        />
+        <Text
+          style={[
+            styles.label,
+            { color: isFocused ? ACTIVE_COLOR : INACTIVE_COLOR },
+          ]}
+          numberOfLines={1}
+        >
+          {label.toUpperCase()}
+        </Text>
+      </View>
     </Pressable>
   );
 }
@@ -60,43 +70,39 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 20,
     left: 16,
-    right: 84,
+    right: 16,
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "#ffffff",
-    borderRadius: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
+    borderRadius: 999,
+    padding: 6,
     shadowColor: "#000",
     shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowRadius: 16,
     shadowOffset: { width: 0, height: 4 },
     elevation: 4,
   },
   tabButton: {
+    flex: 1,
+  },
+  tabInner: {
     alignItems: "center",
-    gap: 2,
-    paddingHorizontal: 6,
+    gap: 4,
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+    marginHorizontal: 4,
+    marginVertical: 4,
+    borderRadius: 16,
+    backgroundColor: "transparent",
+    overflow: "hidden",
+  },
+  tabInnerActive: {
+    backgroundColor: ACTIVE_BG,
   },
   label: {
-    fontSize: 11,
-    fontWeight: "600",
-  },
-  fab: {
-    position: "absolute",
-    bottom: 20,
-    right: 16,
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: "#C1694A",
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 6,
+    fontSize: 10,
+    fontWeight: "700",
+    letterSpacing: 0.3,
   },
 });
