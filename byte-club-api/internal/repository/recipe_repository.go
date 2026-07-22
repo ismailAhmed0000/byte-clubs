@@ -19,9 +19,13 @@ func (r *RecipeRepository) Create(recipe *models.Recipe) error {
 	return r.DB.Create(recipe).Error
 }
 
-func (r *RecipeRepository) FindAllByUser(UserId uint)([]models.Recipe,error){
+func (r *RecipeRepository) FindAllByUser(UserId uint,limit int)([]models.Recipe,error){
 	var recipes []models.Recipe
-	err := r.DB.Where("user_id = ?",UserId).Find(&recipes).Error
+	query := r.DB.Where("user_id = ?",UserId).Order("created_at desc")
+	if limit >0{
+		query = query.Limit(limit)
+	}
+	err := query.Find(&recipes).Error
 	return  recipes, err
 
 }

@@ -52,8 +52,9 @@ func (h *RecipeHandler) Save(c *fiber.Ctx) error {
 
 func (h *RecipeHandler)List(c *fiber.Ctx)error{
 	userId := c.Locals("user_id").(uint)
+	limit := c.QueryInt("Limit",0)
 
-	recipes, err := h.RecipeRepo.FindAllByUser(userId)
+	recipes, err := h.RecipeRepo.FindAllByUser(userId,limit)
 	if err != nil{
 		return  c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error":"could not fetch recipes"})
 	}
