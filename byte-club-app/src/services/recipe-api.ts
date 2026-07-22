@@ -12,7 +12,7 @@ export type Recipe = {
 };
 
 export function getRecipe() {
-  return apiRequest<Recipe[]>("/recipe", { method: "GET", auth: true });
+  return apiRequest<Recipe[]>("/recipes", { method: "GET", auth: true });
 }
 
 export function getRecentRecipes(limit = 2) {

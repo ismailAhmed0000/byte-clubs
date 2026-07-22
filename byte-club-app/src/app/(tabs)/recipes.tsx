@@ -1,20 +1,19 @@
-import { useState } from "react";
+import { getRecipe, Recipe } from "@/services/recipe-api";
+import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const filters = ["All", "Breakfast", "Dinner", "Dessert"];
 
-const savedRecipes = [
-  { id: "1", title: "Miso Sheet-Pan Salmon", author: "Jonas Kade" },
-  { id: "2", title: "Charred Broccoli Salad", author: "Priya N." },
-  { id: "3", title: "Spiced Chickpea Stew", author: "Maya Lin" },
-  { id: "4", title: "Lemon Herb Chicken", author: "Maya Lin" },
-  { id: "5", title: "Caramelized Onion Pasta", author: "Jonas Kade" },
-  { id: "6", title: "Roasted Tomato Soup", author: "Priya N." },
-];
-
 export default function RecipesScreen() {
+  const [recipes, setRecipe] = useState<Recipe[]>([]);
   const [activeFilter, setActiveFilter] = useState("All");
+
+  useEffect(() => {
+    getRecipe()
+      .then(setRecipe)
+      .catch(() => {});
+  });
 
   return (
     <View className="flex-1 bg-[#EEF0EA]">
@@ -58,9 +57,9 @@ export default function RecipesScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View className="flex-row flex-wrap justify-between gap-y-4">
-            {savedRecipes.map((recipe) => (
+            {recipes.map((recipe) => (
               <View
-                key={recipe.id}
+                key={recipe.ID}
                 className="w-[48%] overflow-hidden rounded-2xl bg-white"
               >
                 <View className="h-28 items-center justify-center bg-[#E3E6DE]">
@@ -71,7 +70,7 @@ export default function RecipesScreen() {
                     {recipe.title}
                   </Text>
                   <Text className="mt-0.5 text-sm text-neutral-500">
-                    {recipe.author}
+                    {recipe.platform}
                   </Text>
                 </View>
               </View>
