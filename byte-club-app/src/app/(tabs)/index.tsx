@@ -4,14 +4,22 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Platform } from "react-native";
 import { getCurrentUser } from "@/services/auth-api";
 import { useEffect, useState } from "react";
+import { getRecentRecipes, Recipe } from "@/services/recipe-api";
 
 export default function HomeScreen() {
   const [email, setEmail] = useState("");
+  const [recentlyAdded, setRecentlyAdded] = useState<Recipe[]>([]);
   useEffect(() => {
     getCurrentUser()
       .then((user) => setEmail(user.email))
       .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    getRecentRecipes(2)
+      .then(setRecentlyAdded)
+      .catch(() => {});
+  });
   return (
     <View className="flex-1 bg-[#EEF0EA]">
       <SafeAreaView className="flex-1">
@@ -80,9 +88,9 @@ export default function HomeScreen() {
           </View>
 
           <View className="mt-3 gap-4">
-            {/* {recentlyAdded.map((recipe) => (
+            {recentlyAdded.map((recipe) => (
               <View
-                key={recipe.id}
+                key={recipe.ID}
                 className="overflow-hidden rounded-2xl bg-white"
               >
                 <View className="h-40 items-center justify-center bg-[#E3E6DE]">
@@ -90,14 +98,14 @@ export default function HomeScreen() {
                 </View>
                 <View className="p-3">
                   <Text className="font-semibold text-black">
-                    {recipe.title}
+                    {recipe.Title}
                   </Text>
                   <Text className="mt-0.5 text-sm text-neutral-500">
-                    by {recipe.author} · {recipe.time}
+                    {recipe.Platform}
                   </Text>
                 </View>
               </View>
-            ))} */}
+            ))}
           </View>
         </ScrollView>
       </SafeAreaView>
