@@ -2,7 +2,7 @@ import { Platform } from "react-native";
 
 import { getAuthToken } from "@/services/token";
 
-export const API_BASE_URL = process.env.EXPO_BASE_URL;
+export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export async function apiRequest<T>(
   path: string,

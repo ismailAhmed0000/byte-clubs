@@ -18,14 +18,14 @@ export type LoginPayload = {
 };
 
 export function registerUser(payload: RegisterPayload) {
-  return apiRequest<{ message: string; token: string }>("/Auth/register", {
+  return apiRequest<{ message: string; token: string }>("/auth/register", {
     method: "POST",
     body: payload,
   });
 }
 
 export function loginUser(payload: LoginPayload) {
-  return apiRequest<{ message: string; token: string }>("/Auth/login", {
+  return apiRequest<{ message: string; token: string }>("/auth/login", {
     method: "POST",
     body: payload,
   });
