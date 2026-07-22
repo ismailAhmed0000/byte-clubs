@@ -86,3 +86,18 @@ func (h *AuthHandler) Login(c*fiber.Ctx) error{
 		"token":token,
 	})
 }
+
+func (h *AuthHandler) Me(c*fiber.Ctx) error{
+	userId := c.Locals("user_id").(uint)
+
+	user, err := h.userRepo.FindByID(userId)
+	if err !=nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error":"user not found"})
+	}
+
+	return c.JSON(fiber.Map{
+		"id":user.ID,
+		"name":user.Name,
+		"email":user.Email,
+	})
+}

@@ -23,6 +23,10 @@ func Setup(app *fiber.App, db *gorm.DB){
 	auth.Post("/register",authHandler.Regeister)
 	auth.Post("/login",authHandler.Login)
 
+	me :=api.Group("/auth",middleware.Protected())
+	me.Get("/me",authHandler.Me)
+	
+
 	recipes := api.Group("/recipes",middleware.Protected())
 	recipes.Post("/",recipeHandler.Save)
 	recipes.Post("/extract",recipeHandler.Extract)
