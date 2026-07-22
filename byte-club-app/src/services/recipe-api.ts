@@ -2,13 +2,13 @@ import { apiRequest } from "./client";
 
 export type Recipe = {
   ID: number;
-  UserId: number;
-  SourceUrl: string;
-  Platform: string;
-  Title: string;
-  Instructions: string;
-  Ingredients: string;
-  ShareToken: string;
+  userId: number;
+  sourceUrl: string;
+  platform: string;
+  title: string;
+  instructions: string;
+  ingredients: string;
+  shareToken: string;
 };
 
 export function getRecipe() {

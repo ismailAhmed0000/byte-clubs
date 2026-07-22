@@ -98,10 +98,10 @@ export default function HomeScreen() {
                 </View>
                 <View className="p-3">
                   <Text className="font-semibold text-black">
-                    {recipe.Title}
+                    {recipe.title}
                   </Text>
                   <Text className="mt-0.5 text-sm text-neutral-500">
-                    {recipe.Platform}
+                    {recipe.platform}
                   </Text>
                 </View>
               </View>
