@@ -69,7 +69,12 @@ type oEmbedResponse struct {
 }
 
 func fetchTikTokCaption(videoURL string) (string, error) {
-	endpoint := "https://www.tiktok.com/oembed?url=" + url.QueryEscape(videoURL)
+	resolvedURL, err := resolveRedirect(videoURL)
+	if err != nil {
+		return "", err
+	}
+
+	endpoint := "https://www.tiktok.com/oembed?url=" + url.QueryEscape(resolvedURL)
 
 	resp, err := http.Get(endpoint)
 	if err != nil {
@@ -92,6 +97,15 @@ func fetchTikTokCaption(videoURL string) (string, error) {
 	}
 
 	return parsed.Title, nil
+}
+
+func resolveRedirect(shortURL string) (string, error) {
+	resp, err := http.Get(shortURL)
+	if err != nil {
+		return "", fmt.Errorf("failed to resolve url: %w", err)
+	}
+	defer resp.Body.Close()
+	return resp.Request.URL.String(), nil
 }
 
 func fetchInstagramCaption(videoURL string) (string, error) {
