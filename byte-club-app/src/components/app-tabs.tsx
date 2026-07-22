@@ -1,4 +1,4 @@
-import { extractRecipe } from "@/services/recipe-api";
+import { extractRecipe, saveRecipe } from "@/services/recipe-api";
 import { Ionicons } from "@expo/vector-icons";
 import {
   Tabs,
@@ -31,7 +31,14 @@ export default function AppTabs() {
     setError(null);
     setSubmitting(true);
     try {
-      await extractRecipe(url);
+      const extracted = await extractRecipe(url);
+      await saveRecipe({
+        source_url: url,
+        platform: url.includes("tiktok.com") ? "tiktok" : "instagram",
+        title: extracted.title,
+        ingredients: extracted.ingredients.join("\n"),
+        instructions: extracted.instructions.join("\n"),
+      });
       setImportVisible(false);
       setUrl("");
     } catch (err) {

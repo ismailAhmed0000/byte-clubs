@@ -33,10 +33,30 @@ export function deleteRecipe(id: number) {
   });
 }
 
+export type ExtractedRecipe = {
+  title: string;
+  ingredients: string[];
+  instructions: string[];
+};
+
 export function extractRecipe(url: string) {
-  return apiRequest<Recipe>("/recipes/extract", {
+  return apiRequest<ExtractedRecipe>("/recipes/extract", {
     method: "POST",
     body: { url },
+    auth: true,
+  });
+}
+
+export function saveRecipe(payload: {
+  source_url: string;
+  platform: string;
+  title: string;
+  ingredients: string;
+  instructions: string;
+}) {
+  return apiRequest<Recipe>("/recipes", {
+    method: "POST",
+    body: payload,
     auth: true,
   });
 }
