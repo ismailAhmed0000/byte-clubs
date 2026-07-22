@@ -34,5 +34,9 @@ export function deleteRecipe(id: number) {
 }
 
 export function extractRecipe(url: string) {
-  return apiRequest<Recipe>("/recipe/extract", { method: "POST", auth: true });
+  return apiRequest<Recipe>("/recipes/extract", {
+    method: "POST",
+    body: url,
+    auth: true,
+  });
 }
