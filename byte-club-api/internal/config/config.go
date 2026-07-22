@@ -9,6 +9,7 @@ import (
 
 
 type Config struct {
+	Port string
 	DBHost string
 	DBPort string
 	DBUser string
@@ -22,7 +23,13 @@ func Load() *Config{
 		log.Println("no .env file found")
 	 }
 
+	 port := os.Getenv("PORT")
+	 if port == "" {
+		port = "3002"
+	 }
+
 	 return &Config{
+		Port: port,
 		DBHost: os.Getenv("DB_HOST"),
 		DBPort: os.Getenv("DB_PORT"),
 		DBUser:     os.Getenv("DB_USER"),
