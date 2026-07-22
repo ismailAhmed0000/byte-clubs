@@ -1,6 +1,6 @@
 import { getRecipe, Recipe } from "@/services/recipe-api";
 import { useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { Modal, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const filters = ["All", "Breakfast", "Dinner", "Dessert"];
@@ -8,6 +8,7 @@ const filters = ["All", "Breakfast", "Dinner", "Dessert"];
 export default function RecipesScreen() {
   const [recipes, setRecipe] = useState<Recipe[]>([]);
   const [activeFilter, setActiveFilter] = useState("All");
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
 
   useEffect(() => {
     getRecipe()
@@ -76,6 +77,56 @@ export default function RecipesScreen() {
               </View>
             ))}
           </View>
+          <Modal
+            visible={!!selectedRecipe}
+            animationType="slide"
+            transparent
+            onRequestClose={() => setSelectedRecipe(null)}
+          >
+            <Pressable
+              style={{
+                flex: 1,
+                backgroundColor: "rgba(0,0,0,0.4)",
+                justifyContent: "flex-end",
+              }}
+              onPress={() => setSelectedRecipe(null)}
+            >
+              <Pressable
+                style={{
+                  backgroundColor: "#F6EFE8",
+                  borderTopLeftRadius: 24,
+                  borderTopRightRadius: 24,
+                  padding: 20,
+                  maxHeight: "80%",
+                }}
+                onPress={(e) => e.stopPropagation()}
+              >
+                <ScrollView showsVerticalScrollIndicator={false}>
+                  <Text style={{ fontSize: 20, fontWeight: "700" }}>
+                    {selectedRecipe?.title}
+                  </Text>
+
+                  <Text
+                    style={{ marginTop: 16, fontSize: 16, fontWeight: "700" }}
+                  >
+                    Ingredients
+                  </Text>
+                  <Text style={{ marginTop: 4, color: "#374151" }}>
+                    {selectedRecipe?.ingredients}
+                  </Text>
+
+                  <Text
+                    style={{ marginTop: 16, fontSize: 16, fontWeight: "700" }}
+                  >
+                    Instructions
+                  </Text>
+                  <Text style={{ marginTop: 4, color: "#374151" }}>
+                    {selectedRecipe?.instructions}
+                  </Text>
+                </ScrollView>
+              </Pressable>
+            </Pressable>
+          </Modal>
         </ScrollView>
       </SafeAreaView>
     </View>
