@@ -2,10 +2,7 @@ import { Platform } from "react-native";
 
 import { getAuthToken } from "@/services/token";
 
-export const API_BASE_URL = Platform.select({
-  android: "http://10.0.2.2:3002/api", // Android emulator can't reach "localhost" directly
-  default: "http://localhost:3002/api",
-});
+export const API_BASE_URL = process.env.EXPO_BASE_URL;
 
 export async function apiRequest<T>(
   path: string,
