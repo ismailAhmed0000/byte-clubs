@@ -2,13 +2,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { ScrollView, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Platform } from "react-native";
-
-// const folders = [
-//   { id: "weeknight", name: "Weeknight", count: 6 },
-//   { id: "baking", name: "Baking", count: 4 },
-// ];
+import { getCurrentUser } from "@/services/auth-api";
+import { useEffect, useState } from "react";
 
 export default function HomeScreen() {
+  const [email, setEmail] = useState("");
+  useEffect(() => {
+    getCurrentUser()
+      .then((user) => setEmail(user.email))
+      .catch(() => {});
+  }, []);
   return (
     <View className="flex-1 bg-[#EEF0EA]">
       <SafeAreaView className="flex-1">
@@ -30,7 +33,7 @@ export default function HomeScreen() {
             Byte Club
           </Text>
           <Text className="flex-1 mt-2 text-sm font-bold text-black ">
-            ismaeelahmed@20gmail.com
+            {email}
           </Text>
           <View className="mt-4 flex-row items-center gap-2 rounded-full bg-white px-5 py-2">
             <Ionicons name="search-outline" size={18} color="#9CA3AF" />

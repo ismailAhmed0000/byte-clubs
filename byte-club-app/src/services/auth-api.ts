@@ -30,3 +30,7 @@ export function loginUser(payload: LoginPayload) {
     body: payload,
   });
 }
+
+export function getCurrentUser() {
+  return apiRequest<AuthUser>("/auth/me", { method: "GET", auth: true });
+}
