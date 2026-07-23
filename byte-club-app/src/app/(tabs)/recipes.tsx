@@ -59,8 +59,9 @@ export default function RecipesScreen() {
         >
           <View className="flex-row flex-wrap justify-between gap-y-4">
             {recipes.map((recipe) => (
-              <View
+              <Pressable
                 key={recipe.ID}
+                onPress={() => setSelectedRecipe(recipe)}
                 className="w-[48%] overflow-hidden rounded-2xl bg-white"
               >
                 <View className="h-28 items-center justify-center bg-[#E3E6DE]">
@@ -74,7 +75,7 @@ export default function RecipesScreen() {
                     {recipe.platform}
                   </Text>
                 </View>
-              </View>
+              </Pressable>
             ))}
           </View>
           <Modal
