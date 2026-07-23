@@ -1,13 +1,40 @@
-import { TextInput, TextInputProps } from "react-native";
+import { Text, TextInput, TextInputProps, View } from "react-native";
 
-export function TextField(props: TextInputProps) {
+const TEXT = "#201E1D";
+const SURFACE = "#EBDDC5";
+const DIVIDER = "rgba(32,30,29,0.16)";
+
+type Props = TextInputProps & {
+  label?: string;
+  marginBottom?: number;
+};
+
+export function TextField({ label, marginBottom = 0, ...props }: Props) {
   return (
-    <TextInput
-      className="rounded-xl border border-neutral-300 bg-neutral-100 px-4 py-3 text-base text-black dark:border-neutral-700 dark:bg-neutral-900 dark:text-white"
-      placeholderTextColor="#9CA3AF"
-      autoCapitalize="none"
-      autoCorrect={false}
-      {...props}
-    />
+    <View style={{ marginBottom }}>
+      {label && (
+        <Text style={{ fontSize: 12, marginBottom: 5, color: "rgba(32,30,29,0.7)" }}>
+          {label}
+        </Text>
+      )}
+      <TextInput
+        placeholderTextColor="rgba(32,30,29,0.45)"
+        autoCapitalize="none"
+        autoCorrect={false}
+        style={{
+          minHeight: 36,
+          paddingVertical: 6,
+          paddingHorizontal: 14,
+          fontSize: 14,
+          color: TEXT,
+          backgroundColor: SURFACE,
+          borderWidth: 1,
+          borderColor: DIVIDER,
+          borderRadius: 999,
+          fontFamily: "Figtree_400Regular",
+        }}
+        {...props}
+      />
+    </View>
   );
 }
