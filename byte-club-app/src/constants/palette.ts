@@ -1,0 +1,22 @@
+export const BG = "#F5EAD8";
+export const SURFACE = "#EBDDC5";
+export const TEXT = "#201E1D";
+export const ACCENT = "#C67139";
+export const ACCENT_2 = "#7A8A5E";
+export const ACCENT_700 = "#8C491A";
+export const ACCENT_200 = "#FFE1D0";
+export const ACCENT2_200 = "#E1EECC";
+export const NEUTRAL_100 = "#F9F4ED";
+export const NEUTRAL_200 = "#EEE7DB";
+export const NEUTRAL_300 = "#DCD3C4";
+export const NEUTRAL_400 = "#C0B6A5";
+export const NEUTRAL_600 = "#82796A";
+export const NEUTRAL_800 = "#474238";
+export const DIVIDER = "rgba(32,30,29,0.16)";
+export const TEXT_60 = "rgba(32,30,29,0.6)";
+export const TEXT_70 = "rgba(32,30,29,0.7)";
+
+export const CAVEAT = "Caveat_700Bold";
+export const CAPRASIMO = "Caprasimo_400Regular";
+export const FIGTREE = "Figtree_400Regular";
+export const FIGTREE_SEMIBOLD = "Figtree_600SemiBold";

@@ -15,7 +15,7 @@ export default function ProfileScreen() {
     <View className="flex-1 bg-[#EEF0EA]">
       <SafeAreaView className="flex-1">
         <ScrollView
-          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120 }}
+          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 170 }}
           showsVerticalScrollIndicator={false}
         >
           <Text className="mt-2 text-3xl font-bold text-black">Profile</Text>

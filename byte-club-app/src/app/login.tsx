@@ -4,6 +4,7 @@ import { KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-nat
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Circle, Line, Path, Svg } from "react-native-svg";
 
+import { ForkMark } from "@/components/fork-mark";
 import { TextField } from "@/components/text-field";
 import { loginUser, registerUser } from "@/services/auth-api";
 import { setAuthToken } from "@/services/token";
@@ -24,28 +25,6 @@ const TEXT_60 = "rgba(32,30,29,0.6)";
 
 const CAPRASIMO = "Caprasimo_400Regular";
 const FIGTREE = "Figtree_400Regular";
-
-function ForkMark() {
-  return (
-    <Svg width={22} height={22} viewBox="0 0 24 24" fill="none">
-      <Path d="M3 3v18" stroke={BG} strokeWidth={2.75} strokeLinecap="round" strokeLinejoin="round" />
-      <Path
-        d="M3 3c4 0 7 2 7 7s-3 7-7 7"
-        stroke={BG}
-        strokeWidth={2.75}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <Path
-        d="M21 3c-4 0-7 2-7 7s3 7 7 7"
-        stroke={BG}
-        strokeWidth={2.75}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </Svg>
-  );
-}
 
 function RingMark() {
   return (

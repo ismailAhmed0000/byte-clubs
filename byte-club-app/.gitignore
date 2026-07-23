@@ -45,3 +45,8 @@ example
 
 #env
 .env
+
+
+#eas
+eas.json
+app.json

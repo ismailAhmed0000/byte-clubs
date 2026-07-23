@@ -1,31 +1,34 @@
-import { extractRecipe, saveRecipe } from "@/services/recipe-api";
 import { Ionicons } from "@expo/vector-icons";
-import {
-  Tabs,
-  TabList,
-  TabSlot,
-  TabTrigger,
-  type TabTriggerSlotProps,
-} from "expo-router/ui";
-import { use, useState } from "react";
-import {
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Tabs, TabList, TabSlot, TabTrigger, type TabTriggerSlotProps } from "expo-router/ui";
+import { useState } from "react";
+import { Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const ACTIVE_BG = "#D9814F";
-const ACTIVE_COLOR = "#ffffff";
-const INACTIVE_COLOR = "#8B7355";
+import { ForkMark } from "@/components/fork-mark";
+import {
+  ACCENT,
+  BG,
+  DIVIDER,
+  FIGTREE,
+  FIGTREE_SEMIBOLD,
+  NEUTRAL_100,
+  NEUTRAL_600,
+  TEXT,
+  TEXT_60,
+} from "@/constants/palette";
+import { extractRecipe, saveRecipe } from "@/services/recipe-api";
+
+const BAR_TOP_PADDING = 14;
+const BAR_ICON_ROW_HEIGHT = 68;
 
 export default function AppTabs() {
+  const insets = useSafeAreaInsets();
   const [importVisible, setImportVisible] = useState(false);
   const [url, setUrl] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const barHeight = BAR_TOP_PADDING + BAR_ICON_ROW_HEIGHT + insets.bottom;
 
   async function handleRunExtractor() {
     setError(null);
@@ -47,29 +50,40 @@ export default function AppTabs() {
       setSubmitting(false);
     }
   }
+
   return (
     <Tabs>
       <TabSlot />
 
       <TabList asChild>
-        <View style={styles.bar}>
+        <View
+          style={StyleSheet.flatten([
+            styles.bar,
+            { paddingTop: BAR_TOP_PADDING, paddingBottom: insets.bottom },
+          ])}
+        >
           <TabTrigger name="index" href="/" asChild>
-            <TabButton icon="home" label="Home" />
+            <TabButton kind="home" label="Home" />
           </TabTrigger>
           <TabTrigger name="recipes" href="/recipes" asChild>
-            <TabButton icon="restaurant-outline" label="Recipes" />
+            <TabButton kind="recipes" label="Recipes" />
           </TabTrigger>
           <TabTrigger name="cart" href="/cart" asChild>
-            <TabButton icon="sparkles-outline" label="Premium" />
+            <TabButton kind="premium" label="Premium" />
           </TabTrigger>
           <TabTrigger name="profile" href="/profile" asChild>
-            <TabButton icon="settings-outline" label="Settings" />
+            <TabButton kind="settings" label="Settings" />
           </TabTrigger>
         </View>
       </TabList>
-      <Pressable style={styles.fab} onPress={() => setImportVisible(true)}>
-        <Ionicons name="add" size={26} color="#fff" />
+
+      <Pressable
+        style={[styles.fab, { bottom: barHeight + 16 }]}
+        onPress={() => setImportVisible(true)}
+      >
+        <Ionicons name="add" size={26} color={BG} />
       </Pressable>
+
       <Modal
         visible={importVisible}
         animationType="slide"
@@ -86,17 +100,18 @@ export default function AppTabs() {
         >
           <Pressable
             style={{
-              backgroundColor: "#F6EFE8",
-              borderTopLeftRadius: 24,
-              borderTopRightRadius: 24,
+              backgroundColor: NEUTRAL_100,
+              borderTopLeftRadius: 28,
+              borderTopRightRadius: 28,
               padding: 20,
+              paddingBottom: 20 + insets.bottom,
             }}
             onPress={(e) => e.stopPropagation()}
           >
-            <Text style={{ fontSize: 20, fontWeight: "700" }}>
+            <Text style={{ fontFamily: "Caprasimo_400Regular", fontSize: 20, color: TEXT }}>
               Import from Socials
             </Text>
-            <Text style={{ marginTop: 6, color: "#6B7280" }}>
+            <Text style={{ marginTop: 6, fontFamily: FIGTREE, fontSize: 14, color: TEXT_60 }}>
               Paste a TikTok or Instagram Reel link and we&apos;ll extract the
               recipe using AI.
             </Text>
@@ -107,15 +122,17 @@ export default function AppTabs() {
               onChangeText={setUrl}
               style={{
                 marginTop: 16,
-                backgroundColor: "#fff",
+                backgroundColor: BG,
                 borderRadius: 999,
                 paddingHorizontal: 16,
                 paddingVertical: 12,
+                fontFamily: FIGTREE,
+                color: TEXT,
               }}
             />
 
             {error && (
-              <Text style={{ color: "red", marginTop: 8 }}>{error}</Text>
+              <Text style={{ color: "#B3261E", fontFamily: FIGTREE, marginTop: 8 }}>{error}</Text>
             )}
 
             <Pressable
@@ -123,13 +140,14 @@ export default function AppTabs() {
               disabled={submitting || !url}
               style={{
                 marginTop: 16,
-                backgroundColor: ACTIVE_BG,
+                backgroundColor: ACCENT,
                 borderRadius: 999,
                 paddingVertical: 14,
                 alignItems: "center",
+                opacity: submitting || !url ? 0.6 : 1,
               }}
             >
-              <Text style={{ color: "#fff", fontWeight: "700" }}>
+              <Text style={{ color: BG, fontFamily: "Caprasimo_400Regular", fontSize: 15 }}>
                 {submitting ? "Running..." : "Run extractor"}
               </Text>
             </Pressable>
@@ -140,30 +158,45 @@ export default function AppTabs() {
   );
 }
 
+type TabKind = "home" | "recipes" | "premium" | "settings";
+
+const ICONS: Record<TabKind, { active: keyof typeof Ionicons.glyphMap; inactive: keyof typeof Ionicons.glyphMap }> = {
+  home: { active: "home", inactive: "home-outline" },
+  recipes: { active: "restaurant", inactive: "restaurant-outline" },
+  premium: { active: "sparkles", inactive: "sparkles-outline" },
+  settings: { active: "settings", inactive: "settings-outline" },
+};
+
 type TabButtonProps = TabTriggerSlotProps & {
-  icon: keyof typeof Ionicons.glyphMap;
+  kind: TabKind;
   label: string;
 };
 
-function TabButton({ icon, label, isFocused, ...props }: TabButtonProps) {
+function TabButton({ kind, label, isFocused, ...props }: TabButtonProps) {
   return (
     <Pressable {...props} style={styles.tabButton}>
-      <View style={[styles.tabInner, isFocused && styles.tabInnerActive]}>
-        <Ionicons
-          name={icon}
-          size={20}
-          color={isFocused ? ACTIVE_COLOR : INACTIVE_COLOR}
-        />
-        <Text
-          style={[
-            styles.label,
-            { color: isFocused ? ACTIVE_COLOR : INACTIVE_COLOR },
-          ]}
-          numberOfLines={1}
-        >
-          {label.toUpperCase()}
-        </Text>
+      <View style={[styles.badge, isFocused && { backgroundColor: ACCENT }]}>
+        {kind === "recipes" ? (
+          <ForkMark size={22} color={isFocused ? BG : NEUTRAL_600} />
+        ) : (
+          <Ionicons
+            name={isFocused ? ICONS[kind].active : ICONS[kind].inactive}
+            size={24}
+            color={isFocused ? BG : NEUTRAL_600}
+          />
+        )}
       </View>
+      <Text
+        style={{
+          marginTop: 6,
+          fontFamily: isFocused ? FIGTREE_SEMIBOLD : FIGTREE,
+          fontSize: 13,
+          color: isFocused ? TEXT : NEUTRAL_600,
+        }}
+        numberOfLines={1}
+      >
+        {label}
+      </Text>
     </Pressable>
   );
 }
@@ -171,55 +204,40 @@ function TabButton({ icon, label, isFocused, ...props }: TabButtonProps) {
 const styles = StyleSheet.create({
   bar: {
     position: "absolute",
-    bottom: 20,
-    left: 16,
-    right: 16,
+    bottom: 0,
+    left: 0,
+    right: 0,
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "#ffffff",
-    borderRadius: 999,
-    padding: 6,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 4,
+    justifyContent: "space-around",
+    backgroundColor: BG,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    borderTopWidth: 1,
+    borderTopColor: DIVIDER,
   },
   tabButton: {
     flex: 1,
-  },
-  tabInner: {
     alignItems: "center",
-    gap: 4,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
-    marginHorizontal: 4,
-    marginVertical: 4,
-    borderRadius: 16,
+  },
+  badge: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "transparent",
-    overflow: "hidden",
-  },
-  tabInnerActive: {
-    backgroundColor: ACTIVE_BG,
-  },
-  label: {
-    fontSize: 10,
-    fontWeight: "700",
-    letterSpacing: 0.3,
   },
   fab: {
     position: "absolute",
-    bottom: 120,
-    right: 16,
+    right: 20,
     width: 56,
     height: 56,
-    borderRadius: 20,
-    backgroundColor: ACTIVE_BG,
+    borderRadius: 28,
+    backgroundColor: ACCENT,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
+    shadowColor: "#2E2B25",
+    shadowOpacity: 0.25,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 4 },
     elevation: 6,
