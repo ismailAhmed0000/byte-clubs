@@ -13,9 +13,14 @@ import (
 func Setup(app *fiber.App, db *gorm.DB){
 	userRepo := repository.NewUserRepository(db)
 	authHandler := handlers.NewAuthHandler(userRepo)
+	
 
 	recipeRepo := repository.NewRecipeRepository(db)
 	recipeHandler := handlers.NewRecipeHandler(recipeRepo)
+
+	folderRepo :=repository.NewFolderRepository(db)
+	folderHandler := handlers.NewFolderHandler(folderRepo)
+
 
 	api := app.Group("/api")
 
@@ -34,6 +39,11 @@ func Setup(app *fiber.App, db *gorm.DB){
 	recipes.Get("/:id", recipeHandler.GetByID)
 	recipes.Delete("/:id",recipeHandler.Delete)
 	recipes.Post("/:id/share",recipeHandler.Share)
+
+	folders :=api.Group("/folders",middleware.Protected())
+	folders.Post("/",folderHandler.Create)
+	folders.Get("/",folderHandler.List)
+	folders.Delete("/:id",folderHandler.Delete)
 	
 
    public := api.Group("/public")
