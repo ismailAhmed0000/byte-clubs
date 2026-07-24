@@ -2,55 +2,29 @@ import { router } from "expo-router";
 import { useState } from "react";
 import { KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Circle, Line, Path, Svg } from "react-native-svg";
 
 import { ForkMark } from "@/components/fork-mark";
+import { RingMark } from "@/components/ring-mark";
+import { RuledLines } from "@/components/ruled-lines";
 import { TextField } from "@/components/text-field";
+import {
+  ACCENT,
+  ACCENT_200,
+  ACCENT_700,
+  ACCENT2_200,
+  BG,
+  CAPRASIMO,
+  CAVEAT,
+  DIVIDER,
+  FIGTREE,
+  NEUTRAL_100,
+  TEXT,
+  TEXT_60,
+} from "@/constants/palette";
 import { loginUser, registerUser } from "@/services/auth-api";
 import { setAuthToken } from "@/services/token";
 
 type Mode = "login" | "register";
-
-const BG = "#F5EAD8";
-const SURFACE = "#EBDDC5";
-const TEXT = "#201E1D";
-const ACCENT = "#C67139";
-const ACCENT_700 = "#8C491A";
-const ACCENT_200 = "#FFE1D0";
-const ACCENT2_200 = "#E1EECC";
-const NEUTRAL_100 = "#F9F4ED";
-const NEUTRAL_800 = "#474238";
-const DIVIDER = "rgba(32,30,29,0.16)";
-const TEXT_60 = "rgba(32,30,29,0.6)";
-
-const CAPRASIMO = "Caprasimo_400Regular";
-const FIGTREE = "Figtree_400Regular";
-
-function RingMark() {
-  return (
-    <Svg width={24} height={32} viewBox="0 0 26 34">
-      <Path
-        d="M4 14 A9 9 0 1 1 22 14"
-        fill="none"
-        stroke={NEUTRAL_800}
-        strokeWidth={2.5}
-        strokeLinecap="round"
-      />
-      <Line x1={4} y1={14} x2={4} y2={29} stroke={NEUTRAL_800} strokeWidth={2.5} strokeLinecap="round" />
-      <Circle cx={4} cy={30} r={2} fill={NEUTRAL_800} />
-    </Svg>
-  );
-}
-
-function RuledLines() {
-  return (
-    <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, overflow: "hidden" }}>
-      {Array.from({ length: 24 }).map((_, i) => (
-        <View key={i} style={{ height: 38, borderBottomWidth: 1, borderColor: DIVIDER }} />
-      ))}
-    </View>
-  );
-}
 
 export default function LoginScreen() {
   const [mode, setMode] = useState<Mode>("login");
@@ -155,7 +129,7 @@ export default function LoginScreen() {
               >
                 <ForkMark />
               </View>
-              <Text style={{ fontFamily: "Caveat_700Bold", fontSize: 38, color: "#000", marginBottom: 4 }}>
+              <Text style={{ fontFamily: CAVEAT, fontSize: 38, color: "#000", marginBottom: 4 }}>
                 Byte Club
               </Text>
               <Text style={{ fontFamily: FIGTREE, fontSize: 13, color: TEXT_60 }}>

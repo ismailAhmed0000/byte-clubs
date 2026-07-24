@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { Modal, Pressable, ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Modal, Pressable, ScrollView, Text, useWindowDimensions, View } from "react-native";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { PhotoPlaceholder } from "@/components/photo-placeholder";
+import { RingMark } from "@/components/ring-mark";
 import {
   ACCENT_2,
+  ACCENT_700,
   ACCENT2_200,
   BG,
   CAPRASIMO,
@@ -16,12 +18,60 @@ import {
 } from "@/constants/palette";
 import { getRecipe, Recipe } from "@/services/recipe-api";
 
+function splitLines(value: string | undefined) {
+  return (value ?? "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
+function DetailRow({ text, last }: { text: string; last?: boolean }) {
+  return (
+    <Text
+      style={{
+        fontFamily: FIGTREE,
+        fontSize: 14,
+        lineHeight: 19,
+        color: TEXT,
+        paddingVertical: 9,
+        borderBottomWidth: last ? 0 : 1,
+        borderColor: DIVIDER,
+      }}
+    >
+      {text}
+    </Text>
+  );
+}
+
+function SectionTitle({ children }: { children: string }) {
+  return (
+    <Text
+      style={{
+        marginTop: 14,
+        fontFamily: CAPRASIMO,
+        fontSize: 16,
+        color: TEXT,
+        paddingBottom: 8,
+        borderBottomWidth: 1,
+        borderColor: DIVIDER,
+      }}
+    >
+      {children}
+    </Text>
+  );
+}
+
 const filters = ["All", "Breakfast", "Dinner", "Dessert"];
 
 export default function RecipesScreen() {
+  const insets = useSafeAreaInsets();
+  const { height: windowHeight } = useWindowDimensions();
+  const sheetHeight = Math.round(windowHeight * 0.7);
   const [recipes, setRecipe] = useState<Recipe[]>([]);
   const [activeFilter, setActiveFilter] = useState("All");
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const ingredientLines = splitLines(selectedRecipe?.ingredients);
+  const instructionLines = splitLines(selectedRecipe?.instructions);
 
   useEffect(() => {
     getRecipe()
@@ -133,45 +183,104 @@ export default function RecipesScreen() {
             transparent
             onRequestClose={() => setSelectedRecipe(null)}
           >
-            <Pressable
-              style={{
-                flex: 1,
-                backgroundColor: "rgba(0,0,0,0.4)",
-                justifyContent: "flex-end",
-              }}
-              onPress={() => setSelectedRecipe(null)}
-            >
+            <View style={{ flex: 1, justifyContent: "flex-end" }}>
+              {/* backdrop is a sibling behind the sheet, not a wrapping parent, so it
+                  never intercepts touches that land on the sheet — no stopPropagation
+                  needed, and the ScrollView below is free to claim its own drag gestures */}
               <Pressable
                 style={{
-                  backgroundColor: NEUTRAL_100,
-                  borderTopLeftRadius: 28,
-                  borderTopRightRadius: 28,
-                  padding: 20,
-                  maxHeight: "80%",
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: "rgba(0,0,0,0.4)",
                 }}
-                onPress={(e) => e.stopPropagation()}
-              >
-                <ScrollView showsVerticalScrollIndicator={false}>
-                  <Text style={{ fontFamily: CAPRASIMO, fontSize: 20, color: TEXT }}>
-                    {selectedRecipe?.title}
-                  </Text>
+                onPress={() => setSelectedRecipe(null)}
+              />
 
-                  <Text style={{ marginTop: 16, fontFamily: CAPRASIMO, fontSize: 16, color: TEXT }}>
-                    Ingredients
-                  </Text>
-                  <Text style={{ marginTop: 4, fontFamily: FIGTREE, fontSize: 14, color: TEXT }}>
-                    {selectedRecipe?.ingredients}
-                  </Text>
+              <View style={{ height: sheetHeight, paddingTop: 22 }}>
+                {/* russet sheet peeking out behind the card */}
+                <View
+                  style={{
+                    position: "absolute",
+                    top: 20,
+                    left: -6,
+                    right: -10,
+                    bottom: 0,
+                    backgroundColor: ACCENT_700,
+                    borderTopLeftRadius: 28,
+                    borderTopRightRadius: 28,
+                    transform: [{ rotate: "1deg" }],
+                  }}
+                />
 
-                  <Text style={{ marginTop: 16, fontFamily: CAPRASIMO, fontSize: 16, color: TEXT }}>
-                    Instructions
-                  </Text>
-                  <Text style={{ marginTop: 4, fontFamily: FIGTREE, fontSize: 14, color: TEXT }}>
-                    {selectedRecipe?.instructions}
-                  </Text>
-                </ScrollView>
-              </Pressable>
-            </Pressable>
+                <View
+                  style={{
+                    flex: 1,
+                    minHeight: 0,
+                    backgroundColor: NEUTRAL_100,
+                    borderTopLeftRadius: 32,
+                    borderTopRightRadius: 32,
+                    overflow: "hidden",
+                    shadowColor: "#2E2B25",
+                    shadowOpacity: 0.22,
+                    shadowRadius: 16,
+                    shadowOffset: { width: 0, height: 6 },
+                    elevation: 8,
+                  }}
+                >
+                  {/* binder holes, pulled up so only the pin-tips peek over the top edge */}
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      paddingHorizontal: 24,
+                      marginTop: -22,
+                    }}
+                  >
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <RingMark key={i} />
+                    ))}
+                  </View>
+
+                  <ScrollView
+                    style={{ flex: 1, minHeight: 0 }}
+                    contentContainerStyle={{
+                      paddingTop: 12,
+                      paddingHorizontal: 22,
+                      paddingBottom: 22 + insets.bottom,
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    nestedScrollEnabled
+                  >
+                    <Text
+                      style={{
+                        fontFamily: CAPRASIMO,
+                        fontSize: 19,
+                        lineHeight: 23,
+                        color: TEXT,
+                        paddingBottom: 10,
+                        borderBottomWidth: 1,
+                        borderColor: DIVIDER,
+                      }}
+                    >
+                      {selectedRecipe?.title}
+                    </Text>
+
+                    <SectionTitle>Ingredients</SectionTitle>
+                    {ingredientLines.map((line, i) => (
+                      <DetailRow key={i} text={line} last={i === ingredientLines.length - 1} />
+                    ))}
+
+                    <SectionTitle>Instructions</SectionTitle>
+                    {instructionLines.map((line, i) => (
+                      <DetailRow key={i} text={line} last={i === instructionLines.length - 1} />
+                    ))}
+                  </ScrollView>
+                </View>
+              </View>
+            </View>
           </Modal>
         </ScrollView>
       </SafeAreaView>

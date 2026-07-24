@@ -5,14 +5,19 @@ import { Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-nativ
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ForkMark } from "@/components/fork-mark";
+import { RingMark } from "@/components/ring-mark";
+import { RuledLines } from "@/components/ruled-lines";
 import {
   ACCENT,
+  ACCENT_700,
   BG,
+  CAPRASIMO,
   DIVIDER,
   FIGTREE,
   FIGTREE_SEMIBOLD,
   NEUTRAL_100,
   NEUTRAL_600,
+  SURFACE,
   TEXT,
   TEXT_60,
 } from "@/constants/palette";
@@ -98,59 +103,110 @@ export default function AppTabs() {
           }}
           onPress={() => setImportVisible(false)}
         >
-          <Pressable
-            style={{
-              backgroundColor: NEUTRAL_100,
-              borderTopLeftRadius: 28,
-              borderTopRightRadius: 28,
-              padding: 20,
-              paddingBottom: 20 + insets.bottom,
-            }}
-            onPress={(e) => e.stopPropagation()}
-          >
-            <Text style={{ fontFamily: "Caprasimo_400Regular", fontSize: 20, color: TEXT }}>
-              Import from Socials
-            </Text>
-            <Text style={{ marginTop: 6, fontFamily: FIGTREE, fontSize: 14, color: TEXT_60 }}>
-              Paste a TikTok or Instagram Reel link and we&apos;ll extract the
-              recipe using AI.
-            </Text>
-
-            <TextInput
-              placeholder="Paste a TikTok or Instagram Reel link"
-              value={url}
-              onChangeText={setUrl}
+          <Pressable style={{ paddingTop: 22 }} onPress={(e) => e.stopPropagation()}>
+            {/* russet sheet peeking out behind the card */}
+            <View
               style={{
-                marginTop: 16,
-                backgroundColor: BG,
-                borderRadius: 999,
-                paddingHorizontal: 16,
-                paddingVertical: 12,
-                fontFamily: FIGTREE,
-                color: TEXT,
+                position: "absolute",
+                top: 20,
+                left: -6,
+                right: -10,
+                bottom: 0,
+                backgroundColor: ACCENT_700,
+                borderTopLeftRadius: 28,
+                borderTopRightRadius: 28,
+                transform: [{ rotate: "1deg" }],
               }}
             />
 
-            {error && (
-              <Text style={{ color: "#B3261E", fontFamily: FIGTREE, marginTop: 8 }}>{error}</Text>
-            )}
-
-            <Pressable
-              onPress={handleRunExtractor}
-              disabled={submitting || !url}
+            <View
               style={{
-                marginTop: 16,
-                backgroundColor: ACCENT,
-                borderRadius: 999,
-                paddingVertical: 14,
-                alignItems: "center",
-                opacity: submitting || !url ? 0.6 : 1,
+                position: "relative",
+                backgroundColor: NEUTRAL_100,
+                borderTopLeftRadius: 32,
+                borderTopRightRadius: 32,
+                overflow: "hidden",
+                shadowColor: "#2E2B25",
+                shadowOpacity: 0.22,
+                shadowRadius: 16,
+                shadowOffset: { width: 0, height: 6 },
+                elevation: 8,
               }}
             >
-              <Text style={{ color: BG, fontFamily: "Caprasimo_400Regular", fontSize: 15 }}>
-                {submitting ? "Running..." : "Run extractor"}
-              </Text>
-            </Pressable>
+              {/* binder holes, pulled up so only the pin-tips peek over the top edge */}
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  paddingHorizontal: 24,
+                  marginTop: -22,
+                }}
+              >
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <RingMark key={i} />
+                ))}
+              </View>
+
+              <View
+                style={{
+                  position: "relative",
+                  paddingTop: 12,
+                  paddingHorizontal: 22,
+                  paddingBottom: 22 + insets.bottom,
+                }}
+              >
+                <RuledLines count={10} />
+
+                <Text style={{ fontFamily: CAPRASIMO, fontSize: 22, color: TEXT }}>
+                  Import from Socials
+                </Text>
+                <Text style={{ marginTop: 8, fontFamily: FIGTREE, fontSize: 15, lineHeight: 21, color: TEXT_60 }}>
+                  Paste a TikTok or Instagram Reel link and we&apos;ll extract the
+                  recipe using AI.
+                </Text>
+
+                <TextInput
+                  placeholder="Paste a TikTok or Instagram Reel link"
+                  placeholderTextColor={TEXT_60}
+                  value={url}
+                  onChangeText={setUrl}
+                  style={{
+                    marginTop: 18,
+                    backgroundColor: SURFACE,
+                    borderRadius: 999,
+                    paddingHorizontal: 18,
+                    paddingVertical: 14,
+                    fontFamily: FIGTREE,
+                    fontSize: 15,
+                    color: TEXT,
+                  }}
+                />
+
+                {error && (
+                  <Text style={{ color: "#B3261E", fontFamily: FIGTREE, fontSize: 13, marginTop: 8 }}>
+                    {error}
+                  </Text>
+                )}
+
+                <Pressable
+                  onPress={handleRunExtractor}
+                  disabled={submitting || !url}
+                  style={{
+                    marginTop: 16,
+                    height: 50,
+                    borderRadius: 999,
+                    backgroundColor: ACCENT,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    opacity: submitting || !url ? 0.45 : 1,
+                  }}
+                >
+                  <Text style={{ color: BG, fontFamily: CAPRASIMO, fontSize: 15 }}>
+                    {submitting ? "Running..." : "Run extractor"}
+                  </Text>
+                </Pressable>
+              </View>
+            </View>
           </Pressable>
         </Pressable>
       </Modal>
