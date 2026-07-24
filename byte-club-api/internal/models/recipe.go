@@ -5,6 +5,7 @@ import "gorm.io/gorm"
 type Recipe struct{
 	gorm.Model
 	UserId  uint `json:"user_id"`
+	FolderId *uint `json:"folder_id"`
 	SourceUrl string `json:"source_url"`
 	Platform string `json:"platform"`
 	Title string `json:"title"`

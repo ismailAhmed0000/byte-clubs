@@ -38,6 +38,7 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+        "projectId": "e62af704-4feb-4f28-ac89-397a79539365"
     }
   }
 }
